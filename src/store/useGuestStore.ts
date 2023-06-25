@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 export interface GuestStore {
     guest: {
         id?: string;
-        name?: string;
+        name: string;
         email: string;
         phone: string;
         location: string;
