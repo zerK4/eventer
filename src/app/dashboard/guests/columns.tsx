@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { GuestStore } from "@/store/useGuestStore";
+import useGuestStore, { GuestStore } from "@/store/useGuestStore";
 import {
   CaretSortIcon,
   DotsHorizontalIcon,
@@ -18,6 +18,7 @@ import {
 } from "@radix-ui/react-icons";
 import { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
+import RemoveAlert from "./remove-dialog-alert-component";
 
 export const columns: ColumnDef<GuestStore["guest"]>[] = [
   {
@@ -115,7 +116,7 @@ export const columns: ColumnDef<GuestStore["guest"]>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Delete selected</DropdownMenuItem>
+            <RemoveAlert removeRow={{}} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -137,7 +138,7 @@ export const columns: ColumnDef<GuestStore["guest"]>[] = [
             <Link href={guest?.name as string}>
               <DropdownMenuItem>View guest</DropdownMenuItem>
             </Link>
-            <DropdownMenuItem>Delete guest</DropdownMenuItem>
+            <RemoveAlert removeRow={guest} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

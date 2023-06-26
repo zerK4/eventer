@@ -1,13 +1,8 @@
 "use client";
 
 import * as React from "react";
+import { ChevronDownIcon } from "@radix-ui/react-icons";
 import {
-  CaretSortIcon,
-  ChevronDownIcon,
-  DotsHorizontalIcon,
-} from "@radix-ui/react-icons";
-import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -20,14 +15,10 @@ import {
 } from "@tanstack/react-table";
 
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -39,17 +30,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { GuestStore } from "@/store/useGuestStore";
+import useGuestStore, { GuestStore } from "@/store/useGuestStore";
 import { columns } from "./columns";
 
-export default function GuestTable({ data }: { data: GuestStore["guest"][] }) {
+export default function GuestTable({
+  guestData,
+}: {
+  guestData: GuestStore["guest"][];
+}) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const { data, deleteRows } = useGuestStore();
+
+  React.useEffect(() => {
+    useGuestStore.setState({
+      data: guestData,
+    });
+  }, [guestData]);
 
   const table = useReactTable({
     data,
@@ -69,6 +72,12 @@ export default function GuestTable({ data }: { data: GuestStore["guest"][] }) {
       rowSelection,
     },
   });
+
+  React.useEffect(() => {
+    useGuestStore.setState({
+      table: table,
+    });
+  }, [table]);
 
   return (
     <div className="w-full">

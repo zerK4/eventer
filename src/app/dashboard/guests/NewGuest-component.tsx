@@ -56,6 +56,7 @@ export default function NewGuest() {
               id="name"
               value={name}
               className="col-span-3"
+              required
             />
           </div>
           <div className="flex justify-between gap-4 items-center w-full">
@@ -74,6 +75,7 @@ export default function NewGuest() {
               id="email"
               value={email}
               className="col-span-3"
+              required
             />
           </div>
           <div className="flex justify-between gap-4 items-center w-full">
@@ -92,6 +94,7 @@ export default function NewGuest() {
               id="phone"
               value={phone}
               className="col-span-3"
+              required
             />
           </div>
           <div className="flex justify-between gap-4 items-center w-full">
@@ -110,6 +113,7 @@ export default function NewGuest() {
               id="location"
               value={location}
               className="col-span-3"
+              required
             />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import GuestMenuBar from "./MenuBar-component";
 import GuestTable from "./data-table";
 import prisma from "@/lib/prisma";
@@ -6,14 +6,13 @@ import useGuestStore, { GuestStore } from "@/store/useGuestStore";
 import { columns } from "./columns";
 import guestStore from "@/store/useGuestStore";
 import setGuests from "@/store/useGuestStore";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const getUsers = async (): Promise<GuestStore["guest"][]> => {
+const getGuests = async (): Promise<GuestStore["guest"][]> => {
   const data = await prisma.guest.findMany({});
 
   return data;
 };
-
-getUsers();
 
 const newGuest = async (guestData: GuestStore["guest"]) => {
   const data = await prisma.guest.create({
@@ -24,7 +23,7 @@ const newGuest = async (guestData: GuestStore["guest"]) => {
 };
 
 async function Guests() {
-  const guests = await getUsers();
+  const guests = await getGuests();
 
   console.log(guestStore, "getting store");
 
@@ -34,7 +33,9 @@ async function Guests() {
         <GuestMenuBar />
       </div>
       <div className="m-4 mt-0">
-        <GuestTable data={guests} />
+        <Suspense fallback={<Skeleton />}>
+          <GuestTable guestData={guests} />
+        </Suspense>
       </div>
     </div>
   );
