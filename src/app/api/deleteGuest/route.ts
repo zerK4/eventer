@@ -6,35 +6,33 @@ export async function POST(req: Request) {
     const body = await req.json();
     let items;
 
+    console.log(body, 'getting body back');
     if (!_.isArray(body)) {
         items = [body];
     } else {
         items = body;
     }
   
-    console.log(items, 'getting body back');
     
     try {
         const data = await prisma.guest.deleteMany({
             where: {
-                name: {
-                    in: items.map((item) => item.name)
+                id: {
+                    in: items.map((item) => item.id)
                 }
             }
         })
         return NextResponse.json({
-            data: {
               message: `${items.length} guests deleted!`,
-            }
+              data: data
           }, { status: 200}); 
 
-    } catch (e) {
+    } catch (e: any) {
         console.error(e);
 
         return NextResponse.json({
-            data: {
               message: `Ooops, there was a issue deleting the users!`,
-            }
+              err: e.message
           }, { status: 403}); 
     }
   }

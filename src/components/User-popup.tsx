@@ -33,8 +33,6 @@ const userPopNav = [
 function UserPopup() {
   const { user, isLoaded, isSignedIn } = useUser();
 
-  console.log(user);
-
   if (!isLoaded || !isSignedIn) {
     return <SignInButton />;
   }

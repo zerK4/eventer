@@ -11,10 +11,66 @@ datasource db {
   relationMode = "prisma"
 }
 
+model Account {
+  id    String  @unique @default(cuid())
+  name  String
+  email String  @unique
+  phone String? @unique
+  type  String?
+
+  provider   Provider? @relation(fields: [providerId], references: [id])
+  providerId String?
+  creator    Creator?  @relation(fields: [creatorId], references: [id])
+  creatorId  String?
+
+  @@index([providerId, creatorId])
+}
+
 model Guest {
   id       String @unique @default(cuid())
   name     String @unique
   email    String @unique
-  phone    String @unique
+  phone    String
   location String
+  eventId  String
+  event    Event  @relation(fields: [eventId], references: [id])
+
+  @@index([eventId])
+}
+
+model Event {
+  id        String     @unique @default(cuid())
+  name      String
+  location  String?
+  type      String?
+  code      String?
+  guests    Guest[]
+  providers Provider[]
+  creator   Creator    @relation(fields: [creatorId], references: [id])
+  creatorId String
+
+  @@id([name])
+  @@index([creatorId])
+}
+
+model Provider {
+  id       String    @unique @default(cuid())
+  account  Account[]
+  name     String
+  location String?
+  phone    String?
+  email    String?
+  domain   String?
+  events   Event[]
+
+  @@id([name])
+}
+
+model Creator {
+  id      String    @unique @default(cuid())
+  name    String
+  account Account[]
+  events  Event[]
+
+  @@index([id])
 }

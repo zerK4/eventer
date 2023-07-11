@@ -116,7 +116,7 @@ export const columns: ColumnDef<GuestStore["guest"]>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <RemoveAlert removeRow={{}} />
+            <RemoveAlert removeRow={useGuestStore.getState().deleteRows} />
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -138,7 +138,10 @@ export const columns: ColumnDef<GuestStore["guest"]>[] = [
             <Link href={guest?.name as string}>
               <DropdownMenuItem>View guest</DropdownMenuItem>
             </Link>
-            <RemoveAlert removeRow={guest} />
+            <RemoveAlert
+              removeRow={useGuestStore.getState().deleteSingleRow}
+              guest={guest}
+            />
           </DropdownMenuContent>
         </DropdownMenu>
       );

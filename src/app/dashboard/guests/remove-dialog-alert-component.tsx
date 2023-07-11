@@ -14,8 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import useGuestStore from "@/store/useGuestStore";
 
-export default function RemoveAlert({ removeRow }: any) {
-  const { deleteRows } = useGuestStore();
+export default function RemoveAlert({ removeRow, guest }: any) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -35,7 +34,7 @@ export default function RemoveAlert({ removeRow }: any) {
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction className="p-0 bg-transparent">
             <Button
-              onClick={() => deleteRows(removeRow)}
+              onClick={() => removeRow(guest)}
               variant="destructive"
               className="px-8"
             >

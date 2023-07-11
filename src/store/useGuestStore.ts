@@ -14,6 +14,7 @@ export interface GuestStore {
     };
     data: any[];
     table: any;
+    deleteSingleRow: (row: any) => Promise<void>;
     createGuest: () => Promise<void>;
     deleteRows: (row: any | null) => Promise<void>;
 }
@@ -28,14 +29,34 @@ export const useGuestStore = create<GuestStore>((set, get) => ({
     },
     data: [],
     table: null,
-    deleteRows: async (row) => {
+    deleteSingleRow: async (row) => {
         let id: any;
-        if (row) {
+
+        try {
+            id = toast('Hang on, deleting right now...')
+            const {data} = await axios({
+                method: "POST",
+                url: `/api/deleteGuest`,
+                data: row
+            })
+
+            console.log(row);
+            
+
             set((state) => {
                 const data = state.data.filter((item) => item.id!== row.id);
                 return { data };
             });
+            toast.update(id, { render: `${row.name} deleted!`, type: "success", isLoading: false });
+        } catch (err: any) {
+            console.error(err);
+
+            toast.update(id, { render: err.response.data.message, type: "error", isLoading: false });
         }
+        get().table.setRowSelection({});
+    },
+    deleteRows: async (row) => {
+        let id: any;
         
         const selected = get().table.getSelectedRowModel().rows.map((row: any) => {
           return get().data.find((item) => item.id === row.original.id);
@@ -47,7 +68,7 @@ export const useGuestStore = create<GuestStore>((set, get) => ({
             const {data} = await axios({
                 method: "POST",
                 url: `/api/deleteGuest`,
-                data: selected.length === 0 ? row : selected
+                data: selected
             })
             
             const filteredData = get().data.filter((item) => {
@@ -60,11 +81,11 @@ export const useGuestStore = create<GuestStore>((set, get) => ({
                 data: filteredData,
               }); 
 
-              toast.update(id, { render: data.data.message, type: "success", isLoading: false });
+              toast.update(id, { render: data.message, type: "success", isLoading: false });
         } catch (err: any) {
             console.error(err);
 
-            toast.update(id, { render: err.response.data.message, type: "success", isLoading: false });
+            toast.update(id, { render: err.response.data.message, type: "error", isLoading: false });
         }
         get().table.setRowSelection({});
       },

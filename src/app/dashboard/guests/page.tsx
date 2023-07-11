@@ -25,8 +25,6 @@ const newGuest = async (guestData: GuestStore["guest"]) => {
 async function Guests() {
   const guests = await getGuests();
 
-  console.log(guestStore, "getting store");
-
   return (
     <div className="w-full">
       <div className="border-b w-full py-2">
